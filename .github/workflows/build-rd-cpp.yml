@@ -56,10 +56,11 @@ jobs:
       run: ls -l
       
     - name: Cache Ninja
+      working-directory: ${{ github.workspace}}
       uses: actions/cache@v2
       id: cache-ninja
       with:
-        path: ninja*
+        path: rd-cpp/ninja*
         key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
         
     - name: ls -l after
