@@ -50,6 +50,9 @@ jobs:
     - name: Get submodules
       run: git submodule update --init --recursive
       continue-on-error: true
+    
+    - name: ls -l before
+      run: ls -l
       
     - name: Cache Ninja
       uses: actions/cache@v2
@@ -57,6 +60,9 @@ jobs:
       with:
         path: ninja*
         key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
+        
+    - name: ls -l after
+      run: ls -l
       
     - name: Download Ninja
       if: steps.cache-ninja.outputs.cache-hit != 'true'
