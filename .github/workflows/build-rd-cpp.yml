@@ -157,10 +157,7 @@ jobs:
       run: cd build && cmake --config ${{ env.BUILD_TYPE }} -P cmake_install.cmake
 
     - name: Pack
-      working-directory: ${{ env.working-dir }}${{ matrix.config.SEP }}instdir
-      shell: cmake {0}
-      run: |
-        -E tar cJfv ../${{ matrix.config.artifact }} .
+      run: cd export && cmake -E tar cJfv ../${{ matrix.config.artifact }} .
 
     - name: Upload
       uses: actions/upload-artifact@v1
