@@ -43,9 +43,18 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       
+    - name: Cache submodules
+      uses: actions/cache@v2
+      id: cache-submodules
+      with:
+        path: |
+          rd-cpp/thirdparty/spdlog
+          rd-cpp/thirdparty/googletest
+        key: ${{ runner.os }}-submodules-${{ hashFiles('.gitmodules') }}
+      
     - name: Get submodules
+      if: steps.cache-submodules.outputs.cache-hit != 'true'
       run: git submodule update --init --recursive
-      continue-on-error: true
     
     - name: ls -l before
       working-directory: ${{ env.working-dir }}
@@ -169,8 +178,6 @@ jobs:
         if (NOT result EQUAL 0)
           message(FATAL_ERROR "Bad exit status")
         endif()
-
-        execute_process(COMMAND ccache -s)
 
     - name: Install Strip
       working-directory: ${{ env.working-dir }}
