@@ -52,6 +52,7 @@ jobs:
       continue-on-error: true
     
     - name: ls -l before
+      shell: bash
       run: ls -l
       
     - name: Cache Ninja
@@ -62,6 +63,7 @@ jobs:
         key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
         
     - name: ls -l after
+      shell: bash
       run: ls -l
       
     - name: Download Ninja
