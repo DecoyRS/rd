@@ -55,7 +55,7 @@ jobs:
       id: cache-ninja
       with:
         path: ninja*
-        key: ${{ runner.os }}-${{ env.NINJA_VERSION }}
+        key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
       
     - name: Download Ninja
       if: steps.cache-ninja.outputs.cache-hit != 'true'
