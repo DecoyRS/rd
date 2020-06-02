@@ -113,7 +113,7 @@ jobs:
             -DENABLE_TESTS_OPTION:BOOL=OFF
             -DCMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
             -G Ninja
-            -DCMAKE_MAKE_PROGRAM=ninja
+            -DCMAKE_MAKE_PROGRAM=${CMAKE_CURRENT_SOURCE_DIR}/ninja
           RESULT_VARIABLE result
         )
         if (NOT result EQUAL 0)
@@ -157,7 +157,7 @@ jobs:
       working-directory: ${{ env.working-directory }}${{ matrix.config.SEP }}build
       shell: cmake {0}
       run: |
-        -DENABLE_TESTS_OPTION:BOOL=OFF -DBUILD_TYPE=${{ env.BUILD_TYPE }} -P cmake_install.cmake
+        --config ${{ env.BUILD_TYPE }} -P cmake_install.cmake
 
 
     - name: Pack
