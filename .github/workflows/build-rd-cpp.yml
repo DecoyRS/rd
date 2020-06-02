@@ -9,7 +9,6 @@ on:
 env:
   NINJA_VERSION: 1.9.0
   BUILD_TYPE: Release
-  CCACHE_VERSION: 3.7.7
 
 jobs:
   build:
@@ -46,9 +45,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+      
     - name: Get submodules
       run: git submodule update --init --recursive
       continue-on-error: true
+      
+    - name: Cache Ninja
+      uses: actions/cache@v2
+      id: cache-ninja
+      with:
+        path: ninja*
+        key: ${{ runner.os }}-${{ env.NINJA_VERSION }}
       
     - name: Download Ninja
       if: steps.cache-ninja.outputs.cache-hit != 'true'
