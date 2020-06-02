@@ -59,11 +59,6 @@ jobs:
       with:
         path: rd-cpp/ninja*
         key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
-        
-    - name: ls -l after
-      working-directory: ${{ env.working-dir }}
-      shell: bash
-      run: ls -l
       
     - name: Download Ninja
       if: steps.cache-ninja.outputs.cache-hit != 'true'
@@ -93,7 +88,12 @@ jobs:
             COMMAND chmod +x ninja
           )
         endif()
-
+        
+    - name: ls -l after
+      working-directory: ${{ env.working-dir }}
+      shell: bash
+      run: ls -l
+      
     - name: Configure
       working-directory: ${{ env.working-dir }}
       shell: cmake -P {0}
