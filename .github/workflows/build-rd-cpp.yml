@@ -66,8 +66,8 @@ jobs:
       id: cache-ninja
       with:
         path: |
-          rd-cpp/ninja*
-          !rd-cpp/ninja.zip
+          rd-cpp/ninja
+          rd-cpp/ninja.exe
         key: ${{ runner.os }}-Ninja-${{ env.NINJA_VERSION }}
       
     - name: Download Ninja
