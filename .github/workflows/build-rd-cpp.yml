@@ -55,11 +55,6 @@ jobs:
     - name: Get submodules
       if: steps.cache-submodules.outputs.cache-hit != 'true'
       run: git submodule update --init --recursive
-    
-    - name: ls -l before
-      working-directory: ${{ env.working-dir }}
-      shell: bash
-      run: ls -l
       
     - name: Cache Ninja
       uses: actions/cache@v2
@@ -98,11 +93,6 @@ jobs:
             COMMAND chmod +x ninja
           )
         endif()
-        
-    - name: ls -l after
-      working-directory: ${{ env.working-dir }}
-      shell: bash
-      run: ls -l
       
     - name: Configure
       working-directory: ${{ env.working-dir }}
