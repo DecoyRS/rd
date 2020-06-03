@@ -21,20 +21,20 @@ jobs:
       matrix:
         config:
         - {
-            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019.tar.xz",
+            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019",
             os: windows-latest,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
             SEP: \
           }
         - {
-            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang.tar.xz",
+            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang",
             os: ubuntu-latest,
             cc: "clang", cxx: "clang++",
             SEP: /
           }
         - {
-            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang.tar.xz",
+            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang",
             os: macos-latest,
             cc: "clang", cxx: "clang++",
             SEP: /
@@ -172,10 +172,6 @@ jobs:
     - name: Install Strip
       working-directory: ${{ env.working-dir }}
       run: cd build && cmake --config ${{ env.BUILD_TYPE }} -P cmake_install.cmake
-
-    - name: Pack
-      working-directory: ${{ env.working-dir }}
-      run: cmake -E tar cJfv ${{ matrix.config.artifact }} export/include export/libs
 
     - name: Upload
       uses: actions/upload-artifact@v2
