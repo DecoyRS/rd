@@ -180,7 +180,9 @@ jobs:
     - name: Upload
       uses: actions/upload-artifact@v1
       with:
-        path:  ${{ env.working-dir }}${{ matrix.config.SEP }}${{ matrix.config.artifact }}
+        path:  |
+          ${{ env.working-dir }}${{ matrix.config.SEP }}$export${{ matrix.config.SEP }}$include
+          ${{ env.working-dir }}${{ matrix.config.SEP }}$export${{ matrix.config.SEP }}$libs
         name: ${{ matrix.config.artifact }}
 
   release:
