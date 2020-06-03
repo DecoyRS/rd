@@ -188,8 +188,7 @@ jobs:
         name: ${{ matrix.config.artifact }}
 
   release:
-    if: contains(github.ref, 'tags/v')
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
 
     steps:
@@ -199,8 +198,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: rd-cpp-v-202${{ github.run_number }}
+        release_name: Release RD CPP 202.${{ github.run_number }}
         draft: false
         prerelease: false
 
@@ -208,13 +207,12 @@ jobs:
       run: |
         echo "${{ steps.create_release.outputs.upload_url }}" > ./upload_url
 
-    - uses: actions/upload-artifact@v1
+    - uses: actions/upload-artifact@v2
       with:
         path: ./upload_url
         name: upload_url
 
   publish:
-    if: contains(github.ref, 'tags/v')
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
     strategy:
@@ -222,20 +220,20 @@ jobs:
       matrix:
         config:
         - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
-            os: ubuntu-latest
+            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019",
+            os: windows-latest,
           }
         - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.tar.xz",
-            os: ubuntu-latest
+            name: "RD CPP Windows VS 2017", artifact: "RD-CPP-Windows-MSVC-2017",
+            os: windows-2016,
           }
         - {
-            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
-            os: ubuntu-latest
+            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang",
+            os: ubuntu-latest,
           }
         - {
-            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
-            os: ubuntu-latest
+            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang",
+            os: macos-latest,
           }
     needs: release
 
@@ -265,4 +263,4 @@ jobs:
         upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
         asset_path: ./${{ matrix.config.artifact }}
         asset_name: ${{ matrix.config.artifact }}
-        asset_content_type: application/x-gtar
+        asset_content_type: application/zip
