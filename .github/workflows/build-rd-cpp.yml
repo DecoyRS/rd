@@ -178,10 +178,11 @@ jobs:
       run: cmake -E tar cJfv ${{ matrix.config.artifact }} export/include export/libs
 
     - name: Upload
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         path:  |
-          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}**
+          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}include
+          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}libs
         name: ${{ matrix.config.artifact }}
 
   release:
