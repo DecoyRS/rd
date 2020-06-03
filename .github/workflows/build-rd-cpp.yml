@@ -21,27 +21,27 @@ jobs:
       matrix:
         config:
         - {
-            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019",
+            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019.zip",
             os: windows-latest,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
             SEP: \
           }
         - {
-            name: "RD CPP Windows VS 2017", artifact: "RD-CPP-Windows-MSVC-2017",
+            name: "RD CPP Windows VS 2017", artifact: "RD-CPP-Windows-MSVC-2017.zip",
             os: windows-2016,
             cc: "cl", cxx: "cl",
             environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
             SEP: \
           }
         - {
-            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang",
+            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang.zip",
             os: ubuntu-latest,
             cc: "clang", cxx: "clang++",
             SEP: /
           }
         - {
-            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang",
+            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang.zip",
             os: macos-latest,
             cc: "clang", cxx: "clang++",
             SEP: /
@@ -179,6 +179,10 @@ jobs:
     - name: Install Strip
       working-directory: ${{ env.working-dir }}
       run: cd build && cmake --config ${{ env.BUILD_TYPE }} -P cmake_install.cmake
+    
+    - name: Pack
+      working-directory: ${{ env.working-dir }}
+      run: cd export && cmake -E tar "cfv" ../${{ matrix.config.artifact }} --format=zip export include
 
     - name: Upload
       uses: actions/upload-artifact@v2
@@ -186,81 +190,10 @@ jobs:
         path:  |
           ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}**
         name: ${{ matrix.config.artifact }}
-
-  release:
-    runs-on: windows-latest
-    needs: build
-
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: rd-cpp-v-202${{ github.run_number }}
-        release_name: Release RD CPP 202.${{ github.run_number }}
-        draft: false
-        prerelease: false
-
-    - name: Store Release url
-      run: |
-        echo "${{ steps.create_release.outputs.upload_url }}" > ./upload_url
-
-    - uses: actions/upload-artifact@v2
-      with:
-        path: ./upload_url
-        name: upload_url
-
-  publish:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - {
-            name: "RD CPP Windows Latest MSVC", artifact: "RD-CPP-Windows-MSVC-2019",
-            os: windows-latest,
-          }
-        - {
-            name: "RD CPP Windows VS 2017", artifact: "RD-CPP-Windows-MSVC-2017",
-            os: windows-2016,
-          }
-        - {
-            name: "RD CPP Ubuntu Latest Clang", artifact: "RD-CPP-Linux-Clang",
-            os: ubuntu-latest,
-          }
-        - {
-            name: "RD CPP macOS Latest Clang", artifact: "RD-CPP-macOS-Clang",
-            os: macos-latest,
-          }
-    needs: release
-
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: ${{ matrix.config.artifact }}
-        path: ./
-
-    - name: Download URL
-      uses: actions/download-artifact@v1
-      with:
-        name: upload_url
-        path: ./
-    - id: set_upload_url
-      run: |
-        upload_url=`cat ./upload_url`
-        echo ::set-output name=upload_url::$upload_url
-
-    - name: Upload to Release
-      id: upload_to_release
-      uses: actions/upload-release-asset@v1.0.1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.set_upload_url.outputs.upload_url }}
-        asset_path: ./${{ matrix.config.artifact }}
-        asset_name: ${{ matrix.config.artifact }}
-        asset_content_type: application/zip
+        
+    - name: Send to Bintray
+      working-directory: ${{ env.working-dir }}
+      run: curl -T ${{ matrix.config.artifact }} -ualexander-pirogov:${{ secrets.RD_CPP_BINTRAY_KEY }} https://api.bintray.com/content/alexander-pirogov/RD-CPP/${{ env.BUILD_TYPE }}/201.1.${{ github.run_number }}/${{ matrix.config.os }}
+    
+    - name: Publish to Bintray
+      run: curl -X POST -ualexander-pirogov:${{ secrets.RD_CPP_BINTRAY_KEY }} https://api.bintray.com/content/alexander-pirogov/RD-CPP/${{ env.BUILD_TYPE }}/201.1.${{ github.run_number }}/publish
