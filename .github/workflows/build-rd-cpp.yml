@@ -181,8 +181,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         path:  |
-          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}include
-          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}libs
+          ${{ env.working-dir }}${{ matrix.config.SEP }}export${{ matrix.config.SEP }}**
         name: ${{ matrix.config.artifact }}
 
   release:
