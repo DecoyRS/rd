@@ -193,7 +193,7 @@ jobs:
         
     - name: Send to Bintray
       working-directory: ${{ env.working-dir }}
-      run: curl -T ${{ matrix.config.artifact }} -ualexander-pirogov:${{ secrets.RD_CPP_BINTRAY_KEY }} https://api.bintray.com/content/alexander-pirogov/RD-CPP/${{ env.BUILD_TYPE }}/201.1.${{ github.run_number }}/${{ matrix.config.os }}
+      run: curl -T ${{ matrix.config.artifact }} -ualexander-pirogov:${{ secrets.RD_CPP_BINTRAY_KEY }} https://api.bintray.com/content/alexander-pirogov/RD-CPP/${{ env.BUILD_TYPE }}/201.1.${{ github.run_number }}/
     
     - name: Publish to Bintray
       run: curl -X POST -ualexander-pirogov:${{ secrets.RD_CPP_BINTRAY_KEY }} https://api.bintray.com/content/alexander-pirogov/RD-CPP/${{ env.BUILD_TYPE }}/201.1.${{ github.run_number }}/publish
