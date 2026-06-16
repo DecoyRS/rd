@@ -73,7 +73,9 @@ public:
 		 */
 		mutable int32_t counterpart_acknowledge_timestamp = 0;
 
-		mutable Buffer ping_pkg_header{PACKAGE_HEADER_LENGTH};
+		static constexpr int32_t PING_HEADER_LENGTH = sizeof(PING_MESSAGE_LENGTH)
+			+ sizeof(current_timestamp) + sizeof(counterpart_timestamp);
+		mutable Buffer ping_pkg_header{PING_HEADER_LENGTH};
 
 		mutable sequence_number_t max_received_seqn = 0;
 		mutable Buffer send_package_header{PACKAGE_HEADER_LENGTH};

@@ -23,6 +23,7 @@ std::chrono::milliseconds SocketWire::timeout = std::chrono::milliseconds(500);
 constexpr int32_t SocketWire::Base::ACK_MESSAGE_LENGTH;
 constexpr int32_t SocketWire::Base::PING_MESSAGE_LENGTH;
 constexpr int32_t SocketWire::Base::PACKAGE_HEADER_LENGTH;
+constexpr int32_t SocketWire::Base::PING_HEADER_LENGTH;
 
 SocketWire::Base::Base(std::string id, Lifetime parentLifetime, IScheduler* scheduler)
 	: WireBase(scheduler), id(std::move(id)), scheduler(scheduler), lifetimeDef(parentLifetime)
@@ -406,7 +407,7 @@ void SocketWire::Base::ping() const
 				logger->debug("{}: failed to send ping over the network, reason: socket was shut down for sending", this->id);
 				return;
 			}
-			RD_ASSERT_THROW_MSG(sent == PACKAGE_HEADER_LENGTH,
+			RD_ASSERT_THROW_MSG(sent == PING_HEADER_LENGTH,
 				fmt::format("{}: failed to send ping over the network, reason: {}", this->id, socket_sender->DescribeError()))
 		}
 
