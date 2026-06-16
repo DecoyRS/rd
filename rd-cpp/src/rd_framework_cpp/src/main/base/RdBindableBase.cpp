@@ -23,8 +23,8 @@ void RdBindableBase::bind(Lifetime lf, IRdDynamic const* inParent, string_view n
 			location = inParent->get_location().sub(name, ".");
 			this->bind_lifetime = lf;
 		},
-		[this, lf]() {
-			this->bind_lifetime = lf;
+		[this]() {
+			this->bind_lifetime = nullopt;
 			location = location.sub("<<unbound>>", "::");
 			this->parent = nullptr;
 			rdid = RdId::Null();
