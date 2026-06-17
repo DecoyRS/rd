@@ -265,7 +265,7 @@ TEST_F(RdFrameworkTestBase, signal_release_resources)
 		const LifetimeDefinition def;
 		signal.advise(def.lifetime, [ptr](auto const& value) { *ptr = value; });
 	}
-	EXPECT_TRUE(ptr.unique()) << "Signal should release reference to ptr from lambda.";
+	EXPECT_TRUE(ptr.use_count() == 1) << "Signal should release reference to ptr from lambda.";
 	signal.fire(42);
 	EXPECT_EQ(*ptr, 0) << "Signal shouldn't impact ptr value after lifetime termination.";
 	);
@@ -298,7 +298,7 @@ TEST_F(RdFrameworkTestBase, signal_release_resources_from_handler)
 	}
 	signal.fire(42);
 	EXPECT_EQ(*ptr, 42);
-	EXPECT_TRUE(ptr.unique()) << "Signal should release reference to ptr from lambda.";
+	EXPECT_TRUE(ptr.use_count() == 1) << "Signal should release reference to ptr from lambda.";
 	signal.fire(24);
 	EXPECT_EQ(*ptr, 42) << "Signal shouldn't impact ptr value after lifetime termination.";
 

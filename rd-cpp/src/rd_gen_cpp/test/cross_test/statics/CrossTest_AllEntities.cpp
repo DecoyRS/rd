@@ -1,5 +1,6 @@
 #include "CrossTest_AllEntities.h"
 
+#include "DemoModel/ComplicatedPair.Generated.h"
 #include "DemoModel/Derived.Generated.h"
 
 #undef max
@@ -20,10 +21,10 @@ void CrossTestAllEntities::fireAll(const demo::DemoModel& model, const demo::Ext
 		demo::Flags::anyFlag | demo::Flags::cppFlag, demo::MyInitializedEnum::hundred);
 #ifdef __cpp_structured_bindings
 	auto [_bool, _byte, _short, _int, _long, _float, _double, _unsigned_byte, _unsigned_short, _unsigned_int, _unsigned_long, _enum,
-		_flags] = scalar;
+		_flags, _initialized_enum] = scalar;
 	auto const& [__bool, __byte, __short, __int, __long, __float, __double, __unsigned__byte, __unsigned__short, __unsigned__int,
-		__unsigned__long, __enum, __flags] = scalar;
-	auto [first, second] = ComplicatedPair(Derived(L"first"), Derived(L"second"));
+		__unsigned__long, __enum, __flags, __initialized_enum] = scalar;
+	auto [first, second] = demo::ComplicatedPair(demo::Derived(L"first"), demo::Derived(L"second"));
 #endif
 
 	model.get_scalar().set(scalar);

@@ -140,7 +140,7 @@ TEST_F(RdFrameworkTestBase, testBindableCall)
 	EXPECT_FALSE(clientWire->is_subscribed(property_id)) << "Expected to auto-unbind client result";
 
 	EXPECT_TRUE(server_result_lifetime_terminated) << "Expected server lifetime for result to be terminated.";
-	EXPECT_TRUE(server_result.unique()) << "Expected server_result to be released. Test should hold only reference to server result.";
+	EXPECT_EQ(server_result.use_count(), 1) << "Expected server_result to be released. Test should hold only reference to server result.";
 
 	AfterTest();
 }
@@ -202,7 +202,7 @@ TEST_F(RdFrameworkTestBase, testAsyncBindableCall)
 	EXPECT_FALSE(clientWire->is_subscribed(property_id)) << "Expected to auto-unbind client result";
 
 	EXPECT_TRUE(server_result_lifetime_terminated) << "Expected server lifetime for result to be terminated.";
-	EXPECT_TRUE(server_result.unique()) << "Expected server_result to be released. Test should hold only reference to server result.";
+	EXPECT_EQ(server_result.use_count(), 1) << "Expected server_result to be released. Test should hold only reference to server result.";
 
 	AfterTest();
 }
