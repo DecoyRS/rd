@@ -19,6 +19,8 @@ using std::nullopt_t;
 using std::optional;
 using std::variant;
 using std::visit;
+using std::string_view;
+using std::wstring_view;
 }	 // namespace rd
 
 #else
@@ -30,6 +32,7 @@ using std::visit;
 #endif
 #include "optional.hpp"
 #include "mpark/variant.hpp"
+#include "nonstd/string_view.hpp"
 #if defined(_MSC_VER)
 #pragma warning(pop)
 #endif
@@ -43,21 +46,18 @@ using tl::make_optional;
 using tl::nullopt;
 using tl::nullopt_t;
 using tl::optional;
+
+using nonstd::string_view;
+using nonstd::wstring_view;
+using namespace nonstd::literals;
+
 }	 // namespace rd
 
 #endif
 
-#include "nonstd/string_view.hpp"
 namespace rd
 {
-using nonstd::string_view;
-using nonstd::wstring_view;
 using namespace std::literals;
-using namespace nonstd::literals;
-}	 // namespace rd
-
-namespace rd
-{
 using tsl::ordered_map;
 using tsl::ordered_set;
 }	 // namespace rd
