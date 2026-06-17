@@ -73,6 +73,7 @@ public:
 
 template <template <class, class> class C, typename T, typename A>
 class Polymorphic<C<T, A>, typename std::enable_if_t<!util::is_base_of_v<RdReactiveBase, T> &&
+													 !util::is_base_of_v<RdReactiveBase, C<T, A>> &&
 													 !util::is_same_v<Wrapper<T, A>, C<T, A>>>>
 {
 public:
